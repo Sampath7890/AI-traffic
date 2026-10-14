@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f7fb" />
+    <title>RouteWise — AI Traffic Diversion</title>
+    <meta name="description" content="A transparent, student-built demo of AI-assisted traffic diversion in Hyderabad." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand" aria-label="RouteWise">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V6.7c0-1.5 1.2-2.7 2.7-2.7h1.1M20 5v12.3c0 1.5-1.2 2.7-2.7 2.7h-1.1M8 5h8M8 19h8M12 5v14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="9" r="1.2" fill="currentColor"/><circle cx="12" cy="15" r="1.2" fill="currentColor"/></svg>
+          </div>
+          <div><div class="brand-title">RouteWise</div><span class="brand-caption">Traffic diversion system</span></div>
+        </div>
+        <div class="topbar-right">
+          <span class="topbar-note">B.Tech project demonstration</span>
+          <span class="demo-pill">Simulation mode</span>
+          <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark theme" title="Switch to dark theme" data-testid="button-theme-toggle">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.5 8.5 0 1 0 20.2 15.2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Theme</span>
+          </button>
+        </div>
+      </header>
+      <main class="page">
+        <section class="page-heading">
+          <div>
+            <p class="eyebrow">HYDERABAD · STAGE 1</p>
+            <h1>Live route diversion</h1>
+            <p class="heading-subtitle">Model congestion, compare alternate roads, and see the value of a diversion.</p>
+          </div>
+          <div class="updated-chip" aria-label="Map data source">OpenStreetMap road network</div>
+        </section>
+        <nav class="tabs" role="tablist" aria-label="Demo sections">
+          <button type="button" class="tab" id="tab-live" role="tab" aria-selected="true" aria-controls="tab-panel" data-tab="live" data-testid="tab-live">Live Route Diversion</button>
+          <button type="button" class="tab" id="tab-about" role="tab" aria-selected="false" aria-controls="tab-panel" data-tab="about" data-testid="tab-about">About</button>
+        </nav>
+        <section id="tab-panel" role="tabpanel" aria-labelledby="tab-live">
+          <section class="workspace" id="live-view" aria-label="Live route diversion">
+            <aside class="panel controls" aria-label="Route controls">
+              <div class="section-title"><h2>Trip controls</h2><span>Set your journey</span></div>
+              <div class="route-point">
+                <div class="route-point-head"><label class="field-label" for="origin-search"><span class="point-dot"></span>Starting point</label><span class="field-hint">A</span></div>
+                <div class="search-wrap">
+                  <input class="search-input" id="origin-search" type="search" placeholder="Search place or click the map" autocomplete="off" aria-label="Search starting point" data-testid="input-origin" />
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.4" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.3 4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  <div class="suggestions" id="origin-suggestions" role="listbox"></div>
+                </div>
+              </div>
+              <div class="route-point">
+                <div class="route-point-head"><label class="field-label" for="destination-search"><span class="point-dot destination"></span>Destination</label><span class="field-hint">B</span></div>
+                <div class="search-wrap">
+                  <input class="search-input" id="destination-search" type="search" placeholder="Search place or click the map" autocomplete="off" aria-label="Search destination" data-testid="input-destination" />
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.4" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.3 4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  <div class="suggestions" id="destination-suggestions" role="listbox"></div>
+                </div>
+              </div>
+              <div class="divider">or place points directly on the map</div>
+              <div class="control-block">
+                <div class="control-row"><label for="hour-slider">Simulated time</label><span class="value-chip" id="hour-label">8:00 AM</span></div>
+                <input class="range" id="hour-slider" type="range" min="0" max="23" value="8" aria-label="Simulated hour of day" data-testid="input-simulated-time" />
+                <div class="range-labels"><span>12 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span><span>11 PM</span></div>
+                <p class="small-desc">Congestion is estimated from a simulated daily commute pattern.</p>
+              </div>
+              <div class="control-block incident-settings">
+                <div class="toggle-row">
+                  <div><div class="field-label">Incident mode</div><p class="small-desc">Click the map to mark a disruption.</p></div>
+                  <button type="button" class="switch" id="incident-toggle" role="switch" aria-checked="false" aria-label="Enable incident mode" title="Enable incident mode" data-testid="toggle-incident"></button>
+                </div>
+                <div id="incident-options" hidden>
+                  <label class="field-label" for="radius-select" style="margin-top:13px">Impact radius</label>
+                  <div class="control-row radius-value-row"><span class="sr-only">Affected-road distance</span><output class="value-chip" id="radius-value" for="radius-select">250 m</output></div>
+                  <input class="range" id="radius-select" type="range" min="100" max="1000" step="50" value="250" aria-label="Incident affected-road distance" aria-describedby="radius-help" data-testid="select-radius" />
+                  <p class="small-desc" id="radius-help">The circle shows how far from the incident roads can be affected; it is not the delay amount.</p>
+                </div>
+                <div id="incident-status" class="small-desc" aria-live="polite"></div>
+              </div>
+              <div class="actions">
+                <button type="button" class="primary-button" id="calculate-button" data-testid="button-calculate">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 18.5 10 12l3.4 3.5L20 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 8H20v4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <span>Find best route</span>
+                </button>
+                <button type="button" class="icon-button" id="clear-button" title="Clear route and markers" aria-label="Clear route" data-testid="button-clear">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m3 0-.8 13H6.8L6 7m4 4v5m4-5v5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+              <div class="button-row">
+                <button type="button" class="secondary-button" id="demo-button" data-testid="button-run-demo">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" aria-hidden="true"><path d="m9 6 9 6-9 6V6Z" fill="currentColor"/></svg>Run demo
+                </button>
+                <button type="button" class="secondary-button" id="swap-button" title="Swap starting point and destination" data-testid="button-swap">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" aria-hidden="true"><path d="M7 7h11l-3-3m3 3-3 3M17 17H6l3 3m-3-3 3-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Swap points
+                </button>
+              </div>
+            </aside>
+            <div class="map-column">
+              <section class="panel map-panel" aria-label="Interactive Hyderabad map">
+                <div id="map" aria-label="Map. Click once for origin, again for destination."></div>
+                <div class="map-topline">
+                  <div class="map-state" id="map-state"><strong>Choose two locations</strong>Map click sets A, then B</div>
+                  <div class="map-tool" id="map-tool"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-5.4 7-12a7 7 0 0 0-14 0c0 6.6 7 12 7 12Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="9" r="2.2" stroke="currentColor" stroke-width="1.7"/></svg><span>Hyderabad, Telangana</span></div>
+                </div>
+                <div class="map-empty" id="map-empty">
+                  <div class="map-empty-card">
+                    <div class="map-empty-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-5.4 7-12a7 7 0 0 0-14 0c0 6.6 7 12 7 12Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="9" r="2.2" stroke="currentColor" stroke-width="1.7"/></svg></div>
+                    <h3>Start with two points</h3><p>Click the map to place your origin and destination, or search for an address in the trip controls.</p>
+                  </div>
+                </div>
+                <div class="legend" id="map-legend" aria-label="Map congestion legend"></div>
+              </section>
+              <section class="panel routes-panel" aria-labelledby="route-list-title">
+                <div class="route-list-head"><h2 id="route-list-title">Route options</h2><span id="route-count">Waiting for locations</span></div>
+                <div class="route-cards" id="route-cards" aria-live="polite"></div>
+              </section>
+              <section class="panel summary-panel" id="trip-summary" aria-labelledby="summary-title"></section>
+            </div>
+          </section>
+
+          <section id="about-view" class="about-view" aria-label="About RouteWise" hidden>
+            <div class="about-hero panel"><div><p class="eyebrow">PROJECT NOTES · HYDERABAD</p><h2>RouteWise, in plain terms.</h2><p>A student demonstration of how predicting congestion can help choose a better route when roads get busy.</p></div><div class="about-stamp" aria-hidden="true"><span>RW</span><small>DEMO<br/>MODEL</small></div></div>
+            <div class="about-grid">
+              <article class="panel about-card about-wide"><span class="about-number">01 / PURPOSE</span><h3>What does the app do?</h3><p>RouteWise compares route choices across a simplified Hyderabad road network. The live route screen lets you choose a start and destination, explore estimated congestion, and see alternate routes. The simulation screen runs two approaches side by side so their travel times can be compared.</p><p><strong>Important:</strong> congestion and vehicle movement are simulated for this demo. They are not live traffic data.</p></article>
+              <article class="panel about-card"><span class="about-number">02 / DECISION FLOW</span><h3>Prediction → route choice → diversion</h3><ol class="explain-steps"><li><strong>Predict:</strong> estimate how busy road segments may become from the selected scenario.</li><li><strong>Choose:</strong> compare the predicted travel cost of possible paths.</li><li><strong>Divert:</strong> recommend a less delayed path when its expected journey is better.</li></ol></article>
+              <article class="panel about-card"><span class="about-number">03 / INCIDENT MODE</span><h3>What does the circle mean?</h3><p>Turn on incident mode, then click the map to mark or move the disruption point. The radius is the affected-road distance around that point. Segments inside it receive extra delay and a red dashed treatment.</p><p>The radius is <strong>not</strong> the delay amount; it describes how far the disruption reaches.</p></article>
+
+              <article class="panel about-card about-limit"><span class="about-number">05 / LIMITS</span><h3>A demo, not a navigation service.</h3><p>The road network and traffic behavior are simplified, and the model does not receive live sensors, incidents, or driver reports. Real-world performance would need current data, stronger prediction validation, and testing with actual road conditions.</p></article>
+            </div>
+          </section>
+        </section>
+      </main>
+      <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="false"></div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script type="module" src="/js/main.js"></script>
+  </body>
+</html>

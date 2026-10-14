@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "AI Traffic Diversion"
+description = "A professor-ready traffic diversion demo that compares route choices on a Hyderabad map using simulated congestion and incident conditions, with an explainable trip summary."
+version = "1.0.0"
+id = "artifacts/traffic-diversion"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23072
+
+[services.development]
+run = "pnpm --filter @workspace/traffic-diversion run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/traffic-diversion", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/traffic-diversion/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23072"
+BASE_PATH = "/"
