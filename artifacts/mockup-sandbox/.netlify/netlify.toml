@@ -1,0 +1,29 @@
+plugins = []
+headers = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "/opt/build/repo/artifacts/traffic-diversion/dist/public"
+publishOrigin = "config"
+commandOrigin = "config"
+command = "pnpm --filter @workspace/traffic-diversion... run build"
+
+[build.environment]
+NODE_VERSION = "20"
+PNPM_VERSION = "10.30.3"
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
