@@ -1,5 +1,5 @@
 [build]
-  command = "pnpm --filter @workspace/traffic-diversion... run build"
+  command = "npx -y pnpm@10.30.3 --filter @workspace/traffic-diversion... run build"
   publish = "artifacts/traffic-diversion/dist/public"
 
 [build.environment]
